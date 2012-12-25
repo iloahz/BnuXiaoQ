@@ -1,6 +1,12 @@
 import logging
 import hashlib
 from xml.dom import minidom
+from model import *
+import time
+import sys
+
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 def validateSource(timestamp, nonce, signature):
     logging.info('checking timestamp = "{}", nonce = "{}", signature = "{}"'.format(timestamp, nonce, signature))
@@ -13,11 +19,11 @@ def validateSource(timestamp, nonce, signature):
 
 def parseTextXml(x):
     d = minidom.parseString(x)
-    ToUserName = d.getElementsByTagName('ToUserName')[0].childNodes[0].data.encode('utf-8')
-    FromUserName = d.getElementsByTagName('FromUserName')[0].childNodes[0].data.encode('utf-8')
-    CreateTime = d.getElementsByTagName('CreateTime')[0].childNodes[0].data.encode('utf-8')
-    MsgType = d.getElementsByTagName('MsgType')[0].childNodes[0].data.encode('utf-8')
-    Content = d.getElementsByTagName('Content')[0].childNodes[0].data.encode('utf-8')
+    ToUserName = d.getElementsByTagName('ToUserName')[0].childNodes[0].data
+    FromUserName = d.getElementsByTagName('FromUserName')[0].childNodes[0].data
+    CreateTime = d.getElementsByTagName('CreateTime')[0].childNodes[0].data
+    MsgType = d.getElementsByTagName('MsgType')[0].childNodes[0].data
+    Content = d.getElementsByTagName('Content')[0].childNodes[0].data
     return ToUserName, FromUserName, CreateTime, MsgType, Content
 
 def genTextXml(ToUserName, FromUserName, CreateTime, MsgType, Content, FuncFlag):
@@ -50,3 +56,7 @@ def genTextXml(ToUserName, FromUserName, CreateTime, MsgType, Content, FuncFlag)
     s.appendChild(t)
     x.appendChild(s)
     return x.toxml()
+
+def getTopTen():
+    t = TopTenTopic.all().fetch(limit = 10)
+    return t

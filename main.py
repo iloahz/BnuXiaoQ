@@ -12,15 +12,17 @@ class IndexHandler(webapp2.RequestHandler):
         else:
             self.response.write('Bad boy!')
     def post(self):
-        ToUserName, FromUserName, CreateTime, MsgType, Content = parseTextXml(self.request.body)
+        x = self.request.body
+        ToUserName, FromUserName, CreateTime, MsgType, Content = parseTextXml(x)
         logging.info('Received message "{}" from "{}" at "{}"'.format(Content, FromUserName, CreateTime))
-
-        self.response.write(genTextXml(ToUserName = FromUserName,
-                                       FromUserName = ToUserName,
-                                       CreateTime = CreateTime,
-                                       MsgType = MsgType,
-                                       Content = 'You said "'.encode('utf-8') + Content + '"'.encode('utf-8'),
-                                       FuncFlag = '0'))
+        res = 'Don\'t know what you are saying...'
+        res = genTextXml(ToUserName = FromUserName,
+                         FromUserName = ToUserName,
+                         CreateTime = CreateTime,
+                         MsgType = MsgType,
+                         Content = 'You said "' + Content + '"',
+                         FuncFlag = '0')
+        self.response.write(res)
 
 app = webapp2.WSGIApplication([
     ('/', IndexHandler)

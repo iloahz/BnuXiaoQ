@@ -5,5 +5,13 @@ api_version: 1
 threadsafe: true
 
 handlers:
+- url: /init
+  script: init.app
+  login: admin
+
+- url: /topten/fetch
+  script: topten.app
+  login: admin
+
 - url: /
   script: main.app
