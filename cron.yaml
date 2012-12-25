@@ -1,0 +1,4 @@
+cron:
+- description: fetch top 10 topics on oiegg.com
+  url: /topten/fetch
+  schedule: every 10 minutes
