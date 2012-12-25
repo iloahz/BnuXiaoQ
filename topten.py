@@ -1,5 +1,3 @@
-#-*- encoding: utf-8 -*-
-
 import webapp2
 from google.appengine.api import urlfetch
 from bs4 import BeautifulSoup
@@ -27,7 +25,7 @@ def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
     s.appendChild(t)
     x.appendChild(s)
     s = d.createElement('Content')
-    t = d.createCDATASection('蛋蛋十大')
+    t = d.createCDATASection('')
     logging.info(Content)
     s.appendChild(t)
     x.appendChild(s)
@@ -42,6 +40,10 @@ def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
         i = d.createElement('item')
         s = d.createElement('Title')
         t = d.createCDATASection(topic.title)
+        s.appendChild(t)
+        i.appendChild(s)
+        s = d.createElement('Description')
+        t = d.createCDATASection('')
         s.appendChild(t)
         i.appendChild(s)
         s = d.createElement('PicUrl')
