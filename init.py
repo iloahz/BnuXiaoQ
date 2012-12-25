@@ -8,6 +8,7 @@ class InitHandler(webapp2.RequestHandler):
                 t = TopTenTopic()
                 t.url = ''
                 t.title = ''
+                t.authorPic = ''
                 t.rank = i
                 t.save()
 

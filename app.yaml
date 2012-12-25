@@ -13,5 +13,9 @@ handlers:
   script: topten.app
   login: admin
 
+- url: /test/.*
+  script: test.app
+  login: admin
+
 - url: /
   script: main.app

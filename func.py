@@ -57,6 +57,9 @@ def genTextXml(ToUserName, FromUserName, CreateTime, MsgType, Content, FuncFlag)
     x.appendChild(s)
     return x.toxml()
 
+def specialPhrase(c):
+    return
+
 def getTopTen():
     t = TopTenTopic.all().fetch(limit = 10)
     return t

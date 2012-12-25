@@ -1,5 +1,10 @@
 import webapp2
 from func import *
+import topten
+
+def defaultAnswer(ToUserName, FromUserName, CreateTime, MsgType, Content):
+    Content = 'miao~~'
+    return genTextXml(ToUserName, FromUserName, CreateTime, MsgType, Content)
 
 class IndexHandler(webapp2.RequestHandler):
     def get(self):
@@ -14,14 +19,15 @@ class IndexHandler(webapp2.RequestHandler):
     def post(self):
         x = self.request.body
         ToUserName, FromUserName, CreateTime, MsgType, Content = parseTextXml(x)
+        ToUserName, FromUserName = FromUserName, ToUserName
         logging.info('Received message "{}" from "{}" at "{}"'.format(Content, FromUserName, CreateTime))
-        res = 'Don\'t know what you are saying...'
-        res = genTextXml(ToUserName = FromUserName,
-                         FromUserName = ToUserName,
-                         CreateTime = CreateTime,
-                         MsgType = MsgType,
-                         Content = 'You said "' + Content + '"',
-                         FuncFlag = '0')
+        res = None
+        if Content == '10':
+            res = topten.answer(ToUserName, FromUserName, CreateTime, MsgType, Content)
+        else:
+            res = specialPhrase(Content)
+            if not res:
+                res = defaultAnswer(ToUserName, FromUserName, CreateTime, MsgType, Content)
         self.response.write(res)
 
 app = webapp2.WSGIApplication([

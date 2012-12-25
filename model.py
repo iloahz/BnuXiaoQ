@@ -6,4 +6,5 @@ class Msg(db.Model):
 class TopTenTopic(db.Model):
     url = db.StringProperty()
     title = db.StringProperty()
+    authorPic = db.StringProperty()
     rank = db.IntegerProperty()
