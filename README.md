@@ -1,6 +1,6 @@
 BnuXiaoQ
 ========
-I'm a **NOT** robottt.
+I'm **NOT** a robottt
 
 Planned Functions
 -----------------
