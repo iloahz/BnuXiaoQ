@@ -20,3 +20,7 @@ class MessageLog(db.Model):
     req = db.TextProperty()
     res = db.TextProperty()
     date = db.DateTimeProperty(auto_now_add = True)
+
+class Pattern(db.Model):
+    input = db.TextProperty()
+    output = db.TextProperty()

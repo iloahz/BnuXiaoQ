@@ -6,6 +6,7 @@ import hello
 import topten
 import help
 import library
+import pattern
 
 def defaultAnswer(ToUserName, FromUserName, CreateTime, MsgType, Content):
     Content = '小Q都听不懂你在说什么诶...坏人!'
@@ -17,7 +18,7 @@ def saveMsgLog(fromUser, req, res):
     u.save()
     m = MessageLog()
     m.fromUser = u
-    m.req = req
+    m.req = unicode(req)
     m.res = res
     m.save()
 
@@ -37,7 +38,9 @@ class IndexHandler(webapp2.RequestHandler):
         ToUserName, FromUserName = FromUserName, ToUserName
         Content = Content.lower()
         logging.info('Received message "{}" from "{}"'.format(Content, FromUserName))
-        if hello.validate(Content):
+        if pattern.validate(Content):
+            res = pattern.answer(ToUserName, FromUserName, CreateTime, MsgType, Content)
+        elif hello.validate(Content):
             res = hello.answer(ToUserName, FromUserName, CreateTime, MsgType, Content)
         elif help.validate(Content):
             res = help.answer(ToUserName, FromUserName, CreateTime, MsgType, Content)
