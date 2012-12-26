@@ -2,6 +2,11 @@ import webapp2
 from func import *
 from google.appengine.api import memcache
 
+def validate(c):
+    if c == '10':
+        return True
+    return False
+
 def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
     dat = memcache.get('topten')
     if dat:

@@ -13,9 +13,10 @@ class User(db.Model):
     wechatId = db.StringProperty()
     msgCount = db.IntegerProperty(default = 0)
     createDate = db.DateTimeProperty(auto_now_add = True)
+    role = db.IntegerProperty(default = 0)
 
 class MessageLog(db.Model):
     fromUser = db.ReferenceProperty(User)
-    req = db.StringProperty()
-    res = db.StringProperty()
+    req = db.TextProperty()
+    res = db.TextProperty()
     date = db.DateTimeProperty(auto_now_add = True)

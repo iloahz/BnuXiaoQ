@@ -2,6 +2,11 @@ from func import *
 import urllib
 from google.appengine.api import memcache
 
+def validate(c):
+    if c.startswith('b '):
+        return True
+    return False
+
 def packBook(title, author, index, pub, year, isbn, left, Simple):
     r = ''
     r += title + '\n'
@@ -19,7 +24,7 @@ def packBook(title, author, index, pub, year, isbn, left, Simple):
         r += '\n'
     return r
 
-def answer(ToUserName, FromUserName, CreateTime, MsgType, Content, Simple = False):
+def answer(ToUserName, FromUserName, CreateTime, MsgType, Content, Simple = True):
     keyword = ' '.join(Content.split()[1:])
     dat = memcache.get(key = keyword, namespace = 'lib')
     if dat:

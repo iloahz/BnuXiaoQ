@@ -54,7 +54,7 @@ def genTextXml(ToUserName, FromUserName, CreateTime, MsgType, Content, FuncFlag 
     s.appendChild(t)
     x.appendChild(s)
     s = d.createElement('FuncFlag')
-    t = d.createCDATASection(FuncFlag)
+    t = d.createTextNode(FuncFlag)
     s.appendChild(t)
     x.appendChild(s)
     return x.toxml()

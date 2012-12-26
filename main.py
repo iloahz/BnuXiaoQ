@@ -1,19 +1,25 @@
+#-*- encoding: utf-8 -*-
+
 import webapp2
 from func import *
+import hello
 import topten
 import help
 import library
 
 def defaultAnswer(ToUserName, FromUserName, CreateTime, MsgType, Content):
-    Content = 'miao~~XiaoQ can\'t understand that, you naughtie'
+    Content = '小Q都听不懂你在说什么诶...坏人!'
     return genTextXml(ToUserName, FromUserName, CreateTime, MsgType, Content)
 
 def saveMsgLog(fromUser, req, res):
-    m = MessageLog(fromUser, req, res)
-    m.save()
     u = getOrCreateUserById(fromUser)
     u.msgCount += 1
     u.save()
+    m = MessageLog()
+    m.fromUser = u
+    m.req = req
+    m.res = res
+    m.save()
 
 class IndexHandler(webapp2.RequestHandler):
     def get(self):
@@ -31,18 +37,16 @@ class IndexHandler(webapp2.RequestHandler):
         ToUserName, FromUserName = FromUserName, ToUserName
         Content = Content.lower()
         logging.info('Received message "{}" from "{}"'.format(Content, FromUserName))
-        res = None
-        if Content == 'h':
+        if hello.validate(Content):
+            res = hello.answer(ToUserName, FromUserName, CreateTime, MsgType, Content)
+        elif help.validate(Content):
             res = help.answer(ToUserName, FromUserName, CreateTime, MsgType, Content)
-        elif Content == '10':
+        elif topten.validate(Content):
             res = topten.answer(ToUserName, FromUserName, CreateTime, MsgType, Content)
-        elif Content.startswith('b '):
+        elif library.validate(Content):
             res = library.answer(ToUserName, FromUserName, CreateTime, MsgType, Content)
         else:
-            try:
-                res = library.answer(ToUserName, FromUserName, CreateTime, MsgType, 'b ' + Content, True)
-            except Exception:
-                res = defaultAnswer(ToUserName, FromUserName, CreateTime, MsgType, Content)
+            res = defaultAnswer(ToUserName, FromUserName, CreateTime, MsgType, Content)
         saveMsgLog(FromUserName, x, res)
         self.response.write(res)
 
