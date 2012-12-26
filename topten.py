@@ -1,9 +1,11 @@
 import webapp2
-from google.appengine.api import urlfetch
-from bs4 import BeautifulSoup
 from func import *
+from google.appengine.api import memcache
 
 def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
+    dat = memcache.get('topten')
+    if dat:
+        return dat
     r = minidom.getDOMImplementation()
     d = r.createDocument(None, 'xml', None)
     #x is the root node
@@ -60,7 +62,9 @@ def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
     t = d.createTextNode('0')
     s.appendChild(t)
     x.appendChild(s)
-    return x.toxml()
+    dat = x.toxml()
+    memcache.add(key = 'topten', value = dat, time = 1200)
+    return dat
 
 def getAuthorPic(url):
     try:

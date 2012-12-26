@@ -8,3 +8,14 @@ class TopTenTopic(db.Model):
     title = db.StringProperty()
     authorPic = db.StringProperty()
     rank = db.IntegerProperty()
+
+class User(db.Model):
+    wechatId = db.StringProperty()
+    msgCount = db.IntegerProperty(default = 0)
+    createDate = db.DateTimeProperty(auto_now_add = True)
+
+class MessageLog(db.Model):
+    fromUser = db.ReferenceProperty(User)
+    req = db.StringProperty()
+    res = db.StringProperty()
+    date = db.DateTimeProperty(auto_now_add = True)

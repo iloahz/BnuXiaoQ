@@ -3,6 +3,8 @@ import hashlib
 from xml.dom import minidom
 from model import *
 import time
+from google.appengine.api import urlfetch
+from bs4 import BeautifulSoup
 import sys
 
 reload(sys)
@@ -26,7 +28,7 @@ def parseTextXml(x):
     Content = d.getElementsByTagName('Content')[0].childNodes[0].data
     return ToUserName, FromUserName, CreateTime, MsgType, Content
 
-def genTextXml(ToUserName, FromUserName, CreateTime, MsgType, Content, FuncFlag):
+def genTextXml(ToUserName, FromUserName, CreateTime, MsgType, Content, FuncFlag = '0'):
     r = minidom.getDOMImplementation()
     d = r.createDocument(None, 'xml', None)
     x = d.createElement('xml')
@@ -57,9 +59,13 @@ def genTextXml(ToUserName, FromUserName, CreateTime, MsgType, Content, FuncFlag)
     x.appendChild(s)
     return x.toxml()
 
-def specialPhrase(c):
-    return
-
 def getTopTen():
     t = TopTenTopic.all().fetch(limit = 10)
     return t
+
+def getOrCreateUserById(id):
+    u = db.GqlQuery('SELECT * FROM User WHERE wechatId = :1', id).get()
+    if not u:
+        u = User(wechatId = id)
+        u.save()
+    return u

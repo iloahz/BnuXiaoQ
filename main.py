@@ -1,10 +1,19 @@
 import webapp2
 from func import *
 import topten
+import help
+import library
 
 def defaultAnswer(ToUserName, FromUserName, CreateTime, MsgType, Content):
-    Content = 'miao~~'
+    Content = 'miao~~XiaoQ can\'t understand that, you naughtie'
     return genTextXml(ToUserName, FromUserName, CreateTime, MsgType, Content)
+
+def saveMsgLog(fromUser, req, res):
+    m = MessageLog(fromUser, req, res)
+    m.save()
+    u = getOrCreateUserById(fromUser)
+    u.msgCount += 1
+    u.save()
 
 class IndexHandler(webapp2.RequestHandler):
     def get(self):
@@ -20,14 +29,21 @@ class IndexHandler(webapp2.RequestHandler):
         x = self.request.body
         ToUserName, FromUserName, CreateTime, MsgType, Content = parseTextXml(x)
         ToUserName, FromUserName = FromUserName, ToUserName
-        logging.info('Received message "{}" from "{}" at "{}"'.format(Content, FromUserName, CreateTime))
+        Content = Content.lower()
+        logging.info('Received message "{}" from "{}"'.format(Content, FromUserName))
         res = None
-        if Content == '10':
+        if Content == 'h':
+            res = help.answer(ToUserName, FromUserName, CreateTime, MsgType, Content)
+        elif Content == '10':
             res = topten.answer(ToUserName, FromUserName, CreateTime, MsgType, Content)
+        elif Content.startswith('b '):
+            res = library.answer(ToUserName, FromUserName, CreateTime, MsgType, Content)
         else:
-            res = specialPhrase(Content)
-            if not res:
+            try:
+                res = library.answer(ToUserName, FromUserName, CreateTime, MsgType, 'b ' + Content, True)
+            except Exception:
                 res = defaultAnswer(ToUserName, FromUserName, CreateTime, MsgType, Content)
+        saveMsgLog(FromUserName, x, res)
         self.response.write(res)
 
 app = webapp2.WSGIApplication([
