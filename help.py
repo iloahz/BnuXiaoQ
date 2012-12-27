@@ -10,6 +10,6 @@ def validate(c):
 def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
     Content = '''输入“10”查看当前蛋蛋十大话题
 输入“b 书名”查询图书馆图书
-输入“W”可以查看当前天气以及五天预报
+输入“w”查看当前天气以及预报
 '''
     return genTextXml(ToUserName, FromUserName, CreateTime, MsgType, Content, '0')
