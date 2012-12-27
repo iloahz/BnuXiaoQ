@@ -19,7 +19,7 @@ def createOrUpdatePattern(i, o):
     p = db.GqlQuery('SELECT * FROM Pattern WHERE input = :1', i).get()
     if not p:
         p = Pattern()
-        p.input = i
+        p.input = i.lower()
     p.output = o
     p.save()
 
