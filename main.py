@@ -2,7 +2,6 @@
 
 import webapp2
 from func import *
-import hello
 import topten
 import library
 import pattern
@@ -10,7 +9,8 @@ import weather
 
 def defaultAnswer(ToUserName, FromUserName, CreateTime, MsgType, Content):
     Content = '''小Q都听不懂你在说什么诶...坏人!
-输入“h”查看帮助试试'''
+输入“h”查看帮助试试
+顺便说一句，输入都不带引号哦~~'''
     return genTextXml(ToUserName, FromUserName, CreateTime, MsgType, Content)
 
 def saveMsgLog(fromUser, req):
@@ -41,8 +41,6 @@ class IndexHandler(webapp2.RequestHandler):
         logging.info('Received message "{}" from "{}"'.format(Content, ToUserName))
         if pattern.validate(Content):
             res = pattern.answer(ToUserName, FromUserName, CreateTime, MsgType, Content)
-        elif hello.validate(Content):
-            res = hello.answer(ToUserName, FromUserName, CreateTime, MsgType, Content)
         elif topten.validate(Content):
             res = topten.answer(ToUserName, FromUserName, CreateTime, MsgType, Content)
         elif library.validate(Content):
