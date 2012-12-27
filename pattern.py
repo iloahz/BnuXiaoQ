@@ -4,7 +4,6 @@ from google.appengine.ext.webapp import template
 import os
 
 def validate(c):
-    c = c.lower()
     p = db.GqlQuery('SELECT * FROM Pattern WHERE input = :1', c).get()
     if p:
         return True

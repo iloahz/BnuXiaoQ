@@ -6,7 +6,6 @@ from func import *
 import json
 
 def validate(c):
-    c = c.lower()
     if c == 'w':
         return True
     return False

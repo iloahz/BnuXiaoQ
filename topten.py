@@ -3,7 +3,6 @@ from func import *
 from google.appengine.api import memcache
 
 def validate(c):
-    c = c.lower()
     if c == '10':
         return True
     return False
