@@ -25,6 +25,9 @@ def answerNext(d):
     return s
 
 def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
+    dat = memcache.get(key = 'weather')
+    if dat:
+        return dat
     r = minidom.getDOMImplementation()
     d = r.createDocument(None, 'xml', None)
     #x is the root node
@@ -59,6 +62,7 @@ def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
     s.appendChild(t)
     x.appendChild(s)
     dat = x.toxml()
+    memcache.add(key = 'weather', value = dat)
     return dat
 
 def getOrCreateWeatherByDay(d):
