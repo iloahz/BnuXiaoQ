@@ -5,8 +5,9 @@ from google.appengine.api import memcache
 from func import *
 import json
 
-def validate(Content):
-    if Content == 'w':
+def validate(c):
+    c = c.lower()
+    if c == 'w':
         return True
     return False
 

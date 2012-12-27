@@ -3,6 +3,7 @@ import urllib
 from google.appengine.api import memcache
 
 def validate(c):
+    c = c.lower()
     if c.startswith('b '):
         return True
     return False
