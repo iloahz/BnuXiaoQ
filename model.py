@@ -29,3 +29,7 @@ class Weather(db.Model):
     temp = db.StringProperty()
     desc = db.StringProperty()
     wind = db.StringProperty(default = '')
+
+class Alias(db.Model):
+    origin = db.StringProperty()
+    result = db.StringProperty()

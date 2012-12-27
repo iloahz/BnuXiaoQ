@@ -1,6 +1,8 @@
 #-*- encoding: utf-8 -*-
 
+import os
 import webapp2
+from google.appengine.ext.webapp import template
 from func import *
 import topten
 import library
@@ -23,6 +25,31 @@ def saveMsgLog(fromUser, req):
 #    m.res = res
     m.save()
 
+def normalizeContent(c):
+    c = c.lower()
+    a = db.GqlQuery('SELECT * FROM Alias WHERE origin = :1', c).get()
+    if a:
+        c = a.result
+    return c
+
+def createOrUpdateAlias(o, r):
+    a = db.GqlQuery('SELECT * FROM Alias WHERE origin = :1', o).get()
+    if not a:
+        a = Alias()
+        a.origin = o
+    a.result = r
+    a.save()
+
+class AliasHandler(webapp2.RequestHandler):
+    def get(self):
+        path = os.path.join(os.path.dirname(__file__), 'template', 'alias.html')
+        self.response.write(template.render(path, {}))
+    def post(self):
+        o = self.request.get('origin')
+        r = self.request.get('result')
+        createOrUpdateAlias(o, r)
+        self.redirect('/alias')
+
 class IndexHandler(webapp2.RequestHandler):
     def get(self):
         s = self.request.GET['signature']
@@ -37,7 +64,7 @@ class IndexHandler(webapp2.RequestHandler):
         x = self.request.body
         ToUserName, FromUserName, CreateTime, MsgType, Content = parseTextXml(x)
         ToUserName, FromUserName = FromUserName, ToUserName
-        Content = Content.lower()
+        Content = normalizeContent(Content)
         logging.info('Received message "{}" from "{}"'.format(Content, ToUserName))
         if pattern.validate(Content):
             res = pattern.answer(ToUserName, FromUserName, CreateTime, MsgType, Content)
@@ -53,5 +80,6 @@ class IndexHandler(webapp2.RequestHandler):
         self.response.write(res)
 
 app = webapp2.WSGIApplication([
-    ('/', IndexHandler)
+    ('/', IndexHandler),
+    ('/alias', AliasHandler)
 ], debug = True)
