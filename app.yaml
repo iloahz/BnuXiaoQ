@@ -9,12 +9,12 @@ handlers:
   script: init.app
   login: admin
 
-- url: /topten/fetch
+- url: /topten(.*)
   script: topten.app
   login: admin
 
-- url: /test/.*
-  script: test.app
+- url: /weather(.*)
+  script: weather.app
   login: admin
 
 - url: /

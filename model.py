@@ -18,9 +18,14 @@ class User(db.Model):
 class MessageLog(db.Model):
     fromUser = db.ReferenceProperty(User)
     req = db.TextProperty()
-    res = db.TextProperty()
     date = db.DateTimeProperty(auto_now_add = True)
 
 class Pattern(db.Model):
-    input = db.TextProperty()
+    input = db.StringProperty()
     output = db.TextProperty()
+
+class Weather(db.Model):
+    day = db.IntegerProperty()
+    temp = db.StringProperty()
+    desc = db.StringProperty()
+    wind = db.StringProperty(default = '')

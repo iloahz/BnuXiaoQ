@@ -50,7 +50,6 @@ def genTextXml(ToUserName, FromUserName, CreateTime, MsgType, Content, FuncFlag 
     x.appendChild(s)
     s = d.createElement('Content')
     t = d.createCDATASection(Content)
-    logging.info(Content)
     s.appendChild(t)
     x.appendChild(s)
     s = d.createElement('FuncFlag')
