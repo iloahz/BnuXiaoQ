@@ -10,7 +10,8 @@ import pattern
 import weather
 
 def defaultAnswer(ToUserName, FromUserName, CreateTime, MsgType, Content):
-    Content = '小Q都听不懂你在说什么诶...坏人!'
+    Content = '''小Q都听不懂你在说什么诶...坏人!
+输入“h”查看帮助试试'''
     return genTextXml(ToUserName, FromUserName, CreateTime, MsgType, Content)
 
 def saveMsgLog(fromUser, req):
