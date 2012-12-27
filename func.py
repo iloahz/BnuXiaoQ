@@ -2,7 +2,7 @@ import logging
 import hashlib
 from xml.dom import minidom
 from model import *
-import time
+import time, datetime
 from google.appengine.api import urlfetch
 from bs4 import BeautifulSoup
 import sys

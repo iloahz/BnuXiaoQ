@@ -26,7 +26,7 @@ def saveMsgLog(fromUser, req):
     m.save()
 
 def normalizeContent(c):
-    c = c.lower()
+    c = c.lower().strip()
     a = db.GqlQuery('SELECT * FROM Alias WHERE origin = :1', c).get()
     if a:
         c = a.result
