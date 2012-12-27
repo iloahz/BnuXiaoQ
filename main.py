@@ -4,7 +4,6 @@ import webapp2
 from func import *
 import hello
 import topten
-import help
 import library
 import pattern
 import weather
@@ -44,8 +43,6 @@ class IndexHandler(webapp2.RequestHandler):
             res = pattern.answer(ToUserName, FromUserName, CreateTime, MsgType, Content)
         elif hello.validate(Content):
             res = hello.answer(ToUserName, FromUserName, CreateTime, MsgType, Content)
-        elif help.validate(Content):
-            res = help.answer(ToUserName, FromUserName, CreateTime, MsgType, Content)
         elif topten.validate(Content):
             res = topten.answer(ToUserName, FromUserName, CreateTime, MsgType, Content)
         elif library.validate(Content):
