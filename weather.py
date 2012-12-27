@@ -3,7 +3,7 @@
 import webapp2
 from google.appengine.api import memcache
 from func import *
-import simplejson
+import json
 
 def validate(Content):
     if Content == 'w':
@@ -72,7 +72,7 @@ def getOrCreateWeatherByDay(d):
 def updateFive():
     url = 'http://m.weather.com.cn/data/101010200.html'
     res = urlfetch.fetch(url).content
-    j = simplejson.loads(res)
+    j = json.loads(res)
     j = j['weatherinfo']
     temp = list()
     temp.append(j['temp1'])
@@ -98,7 +98,7 @@ def updateFive():
 def updateNow():
     url = 'http://www.weather.com.cn/data/sk/101010200.html'
     res = urlfetch.fetch(url).content
-    j = simplejson.loads(res)
+    j = json.loads(res)
     j = j['weatherinfo']
     temp = j['temp'] + '℃'
     wind = j['WS'] + j['WD']
