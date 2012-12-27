@@ -5,10 +5,10 @@ I'm **NOT** a robottt
 Planned Functions
 -----------------
 
-*	[Top 10 on oiegg.com][ *Done* ]
+*	[Top 10 on oiegg.com][ **Done** ]
 *	Lookup free classrooms
-*	[Lookup books in library][ *Done* ]
-*	[Weather][ *Done* ]
+*	[Lookup books in library][ **Done** ]
+*	[Weather][ **Done** ]
 *	[Schedule][ ***Deleted*** ]
 
 Maybe
