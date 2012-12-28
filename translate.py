@@ -37,6 +37,8 @@ def answer(ToUserName, FromUserName, CreateTime, MsgType, Content, Simple = True
         arg = {
             'client_id' : 'Tx2FORF0UyXaENR9A4OnmD8B',
             'q' : keyword,
+            'from' : 'auto',
+            'to' : 'auto',
         }
         arg = urllib.urlencode(arg)
         url += arg
