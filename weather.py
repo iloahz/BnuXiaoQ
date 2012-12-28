@@ -25,9 +25,6 @@ def answerNext(d):
     return s
 
 def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
-    dat = memcache.get(key = 'weather')
-    if dat:
-        return dat
     r = minidom.getDOMImplementation()
     d = r.createDocument(None, 'xml', None)
     #x is the root node
@@ -48,14 +45,17 @@ def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
     t = d.createCDATASection('Text')
     s.appendChild(t)
     x.appendChild(s)
-    Content = ''
-    Content += answerNow()
-    Content += '未来五天预报：\n'
-    for i in range(1, 6):
-        Content += answerNext(i)
-    w = db.GqlQuery('SELECT * FROM Weather WHERE day = :1', 0).get()
-    Content += '\n更新时间：'
-    Content += (w.updateTime + datetime.timedelta(hours = 8)).strftime('%m月%d日 %H:%M')
+    Content = memcache.get(key = 'weather')
+    if not Content:
+        Content = ''
+        Content += answerNow()
+        Content += '未来五天预报：\n'
+        for i in range(1, 6):
+            Content += answerNext(i)
+        w = db.GqlQuery('SELECT * FROM Weather WHERE day = :1', 0).get()
+        Content += '\n更新时间：'
+        Content += (w.updateTime + datetime.timedelta(hours = 8)).strftime('%m月%d日 %H:%M')
+        memcache.add(key = 'weather', value = Content, time = 600)
     s = d.createElement('Content')
     t = d.createCDATASection(Content)
     s.appendChild(t)
@@ -65,7 +65,6 @@ def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
     s.appendChild(t)
     x.appendChild(s)
     dat = x.toxml()
-    memcache.add(key = 'weather', value = dat, time = 600)
     return dat
 
 def getOrCreateWeatherByDay(d):

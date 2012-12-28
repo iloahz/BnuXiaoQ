@@ -26,9 +26,6 @@ def packBook(title, author, index, pub, year, isbn, left, Simple):
 
 def answer(ToUserName, FromUserName, CreateTime, MsgType, Content, Simple = True):
     keyword = ' '.join(Content.split()[1:])
-    dat = memcache.get(key = keyword, namespace = 'lib')
-    if dat:
-        return dat
     r = minidom.getDOMImplementation()
     d = r.createDocument(None, 'xml', None)
     #x is the root node
@@ -49,48 +46,48 @@ def answer(ToUserName, FromUserName, CreateTime, MsgType, Content, Simple = True
     t = d.createCDATASection('Text')
     s.appendChild(t)
     x.appendChild(s)
-    #get data from lib.bnu.edu.cn
-    url = 'http://opac.lib.bnu.edu.cn:8080/F/'
-    res = urlfetch.fetch(url).content
-    url = res[res.index('http://opac.lib.bnu.edu.cn:8080/F/'):res.rindex('?') + 1]
-    arg = {
-        'func' : 'find-b',
-        'find_code' : 'WRD',
-        'request' : keyword,
-        'local_base' : 'BNU03',
-        'adjacent' : 'Y',
-    }
-    arg = urllib.urlencode(arg)
-    url += arg
-    res = urlfetch.fetch(url).content
-    soup = BeautifulSoup(res)
-    soup = soup.findAll('table', attrs = {'class' : 'items'})
-    Content = ''
-    for i in soup:
-        title = i.find('div', attrs = {'class' : 'itemtitle'}).find('a').get_text()
-#        url = i.find('div', attrs = {'class' : 'itemtitle'}).find('a').get('href')
-        j = i.findAll('tr')
-        k = j[0].find('td', attrs = {'class' : 'content'})
-        s = k.get_text()
-        l = []
-        for t in k.stripped_strings:
-            l.append(t)
-        try:
-            author = l[0]
-            index = l[2]
-            pub = l[4]
-            year = l[6]
-            isbn = l[10]
-            left = ' '.join(l[13].split())
-            Content += packBook(title, author, index, pub, year, isbn, left, Simple)
-        except Exception:
-            pass
-        if len(Content) >= 512:
-            Content += 'More at http://m.lib.bnu.edu.cn'
-            break
-    if Content == '':
-        return
-#    print len(Content)
+    Content = memcache.get(key = keyword, namespace = 'lib')
+    if not Content:
+        #get data from lib.bnu.edu.cn
+        url = 'http://opac.lib.bnu.edu.cn:8080/F/'
+        res = urlfetch.fetch(url).content
+        url = res[res.index('http://opac.lib.bnu.edu.cn:8080/F/'):res.rindex('?') + 1]
+        arg = {
+            'func' : 'find-b',
+            'find_code' : 'WRD',
+            'request' : keyword,
+            'local_base' : 'BNU03',
+            'adjacent' : 'Y',
+        }
+        arg = urllib.urlencode(arg)
+        url += arg
+        res = urlfetch.fetch(url).content
+        soup = BeautifulSoup(res)
+        soup = soup.findAll('table', attrs = {'class' : 'items'})
+        Content = ''
+        for i in soup:
+            title = i.find('div', attrs = {'class' : 'itemtitle'}).find('a').get_text()
+    #        url = i.find('div', attrs = {'class' : 'itemtitle'}).find('a').get('href')
+            j = i.findAll('tr')
+            k = j[0].find('td', attrs = {'class' : 'content'})
+            s = k.get_text()
+            l = []
+            for t in k.stripped_strings:
+                l.append(t)
+            try:
+                author = l[0]
+                index = l[2]
+                pub = l[4]
+                year = l[6]
+                isbn = l[10]
+                left = ' '.join(l[13].split())
+                Content += packBook(title, author, index, pub, year, isbn, left, Simple)
+            except Exception:
+                pass
+            if len(Content) >= 512:
+                Content += 'More at http://m.lib.bnu.edu.cn'
+                break
+        memcache.add(key = keyword, value = Content, namespace = 'lib')
     s = d.createElement('Content')
     t = d.createCDATASection(Content)
     s.appendChild(t)
@@ -100,5 +97,4 @@ def answer(ToUserName, FromUserName, CreateTime, MsgType, Content, Simple = True
     s.appendChild(t)
     x.appendChild(s)
     dat = x.toxml()
-    memcache.add(key = keyword, value = dat, namespace = 'lib')
     return dat

@@ -8,9 +8,6 @@ def validate(c):
     return False
 
 def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
-    dat = memcache.get('topten')
-    if dat:
-        return dat
     r = minidom.getDOMImplementation()
     d = r.createDocument(None, 'xml', None)
     #x is the root node
@@ -68,7 +65,6 @@ def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
     s.appendChild(t)
     x.appendChild(s)
     dat = x.toxml()
-    memcache.add(key = 'topten', value = dat, time = 1200)
     return dat
 
 def getAuthorPic(url):

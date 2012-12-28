@@ -8,6 +8,7 @@ import topten
 import library
 import pattern
 import weather
+import translate
 
 def defaultAnswer(ToUserName, FromUserName, CreateTime, MsgType, Content):
     Content = '''小Q都听不懂你在说什么诶...坏人!
@@ -74,6 +75,8 @@ class IndexHandler(webapp2.RequestHandler):
             res = library.answer(ToUserName, FromUserName, CreateTime, MsgType, Content)
         elif weather.validate(Content):
             res = weather.answer(ToUserName, FromUserName, CreateTime, MsgType, Content)
+        elif translate.validate(Content):
+            res = translate.answer(ToUserName, FromUserName, CreateTime, MsgType, Content)
         else:
             res = defaultAnswer(ToUserName, FromUserName, CreateTime, MsgType, Content)
         saveMsgLog(ToUserName, Content)

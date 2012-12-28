@@ -17,6 +17,10 @@ handlers:
   script: weather.app
   login: admin
 
+- url: /classroom(.*)
+  script: classroom.app
+  login: admin
+
 - url: /pattern(.*)
   script: pattern.app
   login: admin
