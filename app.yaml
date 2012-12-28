@@ -5,6 +5,9 @@ api_version: 1
 threadsafe: true
 
 handlers:
+- url: /static/img
+  static_dir: static/img
+
 - url: /init
   script: init.app
   login: admin

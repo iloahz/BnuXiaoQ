@@ -34,3 +34,7 @@ class Weather(db.Model):
 class Alias(db.Model):
     origin = db.StringProperty()
     result = db.StringProperty()
+
+class ClassRoom(db.Model):
+    name = db.StringProperty()
+    shortcut = db.StringProperty()

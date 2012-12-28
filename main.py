@@ -53,14 +53,18 @@ class AliasHandler(webapp2.RequestHandler):
 
 class IndexHandler(webapp2.RequestHandler):
     def get(self):
-        s = self.request.GET['signature']
-        t = self.request.GET['timestamp']
-        n = self.request.GET['nonce']
-        e = self.request.GET['echostr']
-        if validateSource(timestamp = t, nonce = n, signature = s):
-            self.response.write(e)
-        else:
-            self.response.write('Bad boy!')
+        try:
+            s = self.request.GET['signature']
+            t = self.request.GET['timestamp']
+            n = self.request.GET['nonce']
+            e = self.request.GET['echostr']
+            if validateSource(timestamp = t, nonce = n, signature = s):
+                self.response.write(e)
+            else:
+                self.response.write('Bad boy!')
+        except Exception:
+            path = os.path.join(os.path.dirname(__file__), 'template', 'index.html')
+            self.response.write(template.render(path, {}))
     def post(self):
         x = self.request.body
         ToUserName, FromUserName, CreateTime, MsgType, Content = parseTextXml(x)
