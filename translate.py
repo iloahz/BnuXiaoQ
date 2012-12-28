@@ -4,7 +4,7 @@ from google.appengine.api import memcache
 import json
 
 def validate(c):
-    if c.startswith('d '):
+    if c.startswith('d ') or c.startswith('fy'):
         return True
     return False
 

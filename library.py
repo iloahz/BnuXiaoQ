@@ -3,7 +3,7 @@ import urllib
 from google.appengine.api import memcache
 
 def validate(c):
-    if c.startswith('b '):
+    if c.startswith('b ') or c.startswith('lib '):
         return True
     return False
 
