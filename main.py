@@ -70,8 +70,8 @@ class IndexHandler(webapp2.RequestHandler):
         x = self.request.body
         ToUserName, FromUserName, CreateTime, MsgType, Content = parseTextXml(x)
         ToUserName, FromUserName = FromUserName, ToUserName
-        Content = normalizeContent(Content)
         logging.info('Received message "{}" from "{}"'.format(Content, ToUserName))
+        Content = normalizeContent(Content)
         if pattern.validate(Content):
             res = pattern.answer(ToUserName, FromUserName, CreateTime, MsgType, Content)
         elif topten.validate(Content):
