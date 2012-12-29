@@ -23,6 +23,7 @@ class MessageLog(db.Model):
 class Pattern(db.Model):
     input = db.StringProperty()
     output = db.TextProperty()
+    hintNext = db.StringProperty(default = None)
 
 class Weather(db.Model):
     day = db.IntegerProperty()
@@ -35,6 +36,8 @@ class Alias(db.Model):
     origin = db.StringProperty()
     result = db.StringProperty()
 
-class ClassRoom(db.Model):
+class Classroom(db.Model):
+    building = db.StringProperty()
     name = db.StringProperty()
-    shortcut = db.StringProperty()
+    seats = db.IntegerProperty()
+    schedule = db.StringProperty()

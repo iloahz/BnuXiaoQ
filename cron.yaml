@@ -6,3 +6,8 @@ cron:
 - description: fetch weather info
   url: /weather/fetch
   schedule: every 30 minutes
+
+- description: fetch classroom info
+  url: /classroom/fetch
+  schedule: every day 00:00
+  timezone: Asia/Hong_Kong

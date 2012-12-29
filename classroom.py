@@ -1,16 +1,17 @@
+#-*- encoding: utf-8 -*-
+
 from func import *
 import urllib
-from google.appengine.api import memcache
+#from google.appengine.api import memcache
 import json
 import webapp2
 
 def validate(c):
-    if c.startswith('j2'):
+    if db.GqlQuery('SELECT * FROM Classroom WHERE building = :1', c):
         return True
     return False
 
 def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
-    keyword = ' '.join(Content.split()[1:])
     r = minidom.getDOMImplementation()
     d = r.createDocument(None, 'xml', None)
     #x is the root node
@@ -31,20 +32,20 @@ def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
     t = d.createCDATASection('Text')
     s.appendChild(t)
     x.appendChild(s)
-    Content = memcache.get(key = keyword, namespace = 'dict')
-    if not Content:
-        #get data from baidu
-        url = 'http://openapi.baidu.com/public/2.0/bmt/translate?'
-        arg = {
-            'client_id' : 'Tx2FORF0UyXaENR9A4OnmD8B',
-            'q' : keyword,
-        }
-        arg = urllib.urlencode(arg)
-        url += arg
-        res = urlfetch.fetch(url).content
-        j = json.loads(res)
-        Content = j['trans_result'][0]['dst']
-        memcache.add(key = keyword, value = Content, namespace = 'dict')
+    q = db.GqlQuery('SELECT * FROM Classroom WHERE building = :1 ORDER BY name ASC', Content)
+    Content = ''
+    for c in q.fetch(limit = 999):
+        Content += c.name + ': '
+        tmp = ''
+        for i in range(0, 12):
+            if c.schedule[i] == '0':
+                tmp += 'O'
+            else:
+                tmp += 'X'
+            if i == 3 or i == 7:
+                tmp += ' '
+        if tmp.find('O') >= 0:
+            Content += tmp + '\n'
     s = d.createElement('Content')
     t = d.createCDATASection(Content)
     s.appendChild(t)
@@ -56,11 +57,27 @@ def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
     dat = x.toxml()
     return dat
 
+def getOrCreateClassroomByName(n):
+    c = db.GqlQuery('SELECT * FROM Classroom WHERE name = :1', n).get()
+    if not c:
+        c = Classroom()
+        c.name = n
+        c.save()
+    return c
+
 class FetchHandler(webapp2.RequestHandler):
     def get(self):
         url = 'http://class.bnubaike.cn/api.ashx'
-        res = urlfetch.fetch(url)
+        res = urlfetch.fetch(url).content
         j = json.loads(res)
+        for b in j['buildings']:
+            bn = b['name']
+            for r in b['rooms']:
+                c = getOrCreateClassroomByName(r['n'])
+                c.building = bn
+                c.seats = int(r['s'])
+                c.schedule = r['v']
+                c.save()
 
 app = webapp2.WSGIApplication([
     ('/classroom/fetch', FetchHandler)

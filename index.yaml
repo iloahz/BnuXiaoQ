@@ -1,0 +1,7 @@
+indexes:
+
+- kind: Classroom
+  properties:
+  - name: building
+  - name: name
+    direction: asc
