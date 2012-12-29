@@ -14,9 +14,11 @@ def validate(c):
 
 def getRandomPattern():
     g = db.GqlQuery('SELECT * FROM Global').get()
-    i = random.randint(0, g.totalPattern - 1)
-    p = db.GqlQuery('SELECT * FROM Pattern').fetch(limit = 1, offset = i)
-    return p[0].input
+    i = random.randint(0, g.totalPattern - 2)
+    p = db.GqlQuery('SELECT * FROM Pattern')
+    for i in p.fetch(limit = 9, offset = i):
+        return i.input
+    return None
 
 def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
     p = db.GqlQuery('SELECT * FROM Pattern WHERE input = :1', Content).get()
