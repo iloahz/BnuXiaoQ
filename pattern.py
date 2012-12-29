@@ -1,8 +1,11 @@
+#-*- encoding: utf-8 -*-
+
 import webapp2
 from func import *
 from google.appengine.ext.webapp import template
 import os
 import random
+
 def validate(c):
     p = db.GqlQuery('SELECT * FROM Pattern WHERE input = :1', c).get()
     if p:
@@ -10,8 +13,6 @@ def validate(c):
     return False
 
 def getRandomPattern():
-    if random.randint(0, 1) == 0:
-        return
     g = db.GqlQuery('SELECT * FROM Global').get()
     i = random.randint(0, g.totalPattern - 1)
     p = db.GqlQuery('SELECT * FROM Pattern').fetch(limit = 1, offset = i)
@@ -23,6 +24,9 @@ def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
     if p.hintNext:
         Content += '\n你可以再试试“' + p.hintNext + '”哦~\n'
     p.hintNext = getRandomPattern()
+    if p.hintNext == p.input:
+        p.hintNext = None
+    p.save()
     return genTextXml(ToUserName, FromUserName, CreateTime, MsgType, Content)
 
 def createOrUpdatePattern(i, o):
