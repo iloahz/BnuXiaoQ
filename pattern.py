@@ -36,6 +36,7 @@ def createOrUpdatePattern(i, o):
     if not p:
         p = Pattern()
         p.input = i.lower()
+        p.hintNext = getRandomPattern()
         g = db.GqlQuery('SELECT * FROM Global').get()
         g.totalPattern += 1
         g.save()
