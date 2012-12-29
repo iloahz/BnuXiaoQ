@@ -41,3 +41,6 @@ class Classroom(db.Model):
     name = db.StringProperty()
     seats = db.IntegerProperty()
     schedule = db.StringProperty()
+
+class Global(db.Model):
+    totalPattern = db.IntegerProperty()
