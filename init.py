@@ -19,6 +19,10 @@ class InitHandler(webapp2.RequestHandler):
             p.input = u'喵'
             p.output = u'不要学人家啦，喵~'
             p.save()
+        g = db.GqlQuery('SELECT * FROM Global').get()
+        if not g:
+            g = Global()
+            g.save()
 
 app = webapp2.WSGIApplication([
     ('/init', InitHandler)

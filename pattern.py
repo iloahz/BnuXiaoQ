@@ -15,7 +15,7 @@ def getRandomPattern():
     g = db.GqlQuery('SELECT * FROM Global').get()
     i = random.randint(0, g.totalPattern - 1)
     p = db.GqlQuery('SELECT * FROM Pattern').fetch(limit = 1, offset = i)
-    return p.input
+    return p[0].input
 
 def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
     p = db.GqlQuery('SELECT * FROM Pattern WHERE input = :1', Content).get()
@@ -30,6 +30,9 @@ def createOrUpdatePattern(i, o):
     if not p:
         p = Pattern()
         p.input = i.lower()
+        g = db.GqlQuery('SELECT * FROM Global').get()
+        g.totalPattern += 1
+        g.save()
     p.output = o
     p.save()
 
