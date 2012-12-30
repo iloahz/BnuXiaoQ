@@ -14,7 +14,10 @@ def validate(c):
 def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
     q = db.GqlQuery('SELECT * FROM Classroom WHERE building = :1 ORDER BY name ASC', Content)
     Content = ''
+    upd = None
     for c in q.fetch(limit = 999):
+        if not upd:
+            upd = c.updateTime
         Content += c.name + ': '
         tmp = ''
         for i in range(0, 12):
@@ -26,6 +29,8 @@ def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
                 tmp += ' '
         if tmp.find('O') >= 0:
             Content += tmp + '\n'
+    Content += '\n更新时间：'
+    Content += (upd + datetime.timedelta(hours = 8)).strftime('%m月%d日 %H:%M')
     return genTextXml(ToUserName, FromUserName, CreateTime, MsgType, Content)
 
 def getOrCreateClassroomByName(n):

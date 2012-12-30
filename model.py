@@ -41,6 +41,7 @@ class Classroom(db.Model):
     name = db.StringProperty()
     seats = db.IntegerProperty()
     schedule = db.StringProperty()
+    updateTime = db.DateTimeProperty(auto_now = True)
 
 class Global(db.Model):
     totalPattern = db.IntegerProperty()
