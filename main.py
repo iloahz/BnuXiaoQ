@@ -86,7 +86,6 @@ class IndexHandler(webapp2.RequestHandler):
         else:
             res = defaultAnswer(ToUserName, FromUserName, CreateTime, MsgType, Content)
         saveMsgLog(ToUserName, Content)
-#        logging.info(res)
         self.response.write(res)
 
 app = webapp2.WSGIApplication([

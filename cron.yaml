@@ -9,5 +9,5 @@ cron:
 
 - description: fetch classroom info
   url: /classroom/fetch
-  schedule: every day 00:00
+  schedule: every day 00:05
   timezone: Asia/Hong_Kong

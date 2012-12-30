@@ -12,26 +12,6 @@ def validate(c):
     return False
 
 def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
-    r = minidom.getDOMImplementation()
-    d = r.createDocument(None, 'xml', None)
-    #x is the root node
-    x = d.createElement('xml')
-    s = d.createElement('ToUserName')
-    t = d.createCDATASection(ToUserName)
-    s.appendChild(t)
-    x.appendChild(s)
-    s = d.createElement('FromUserName')
-    t = d.createCDATASection(FromUserName)
-    s.appendChild(t)
-    x.appendChild(s)
-    s = d.createElement('CreateTime')
-    t = d.createTextNode(CreateTime)
-    s.appendChild(t)
-    x.appendChild(s)
-    s = d.createElement('MsgType')
-    t = d.createCDATASection('Text')
-    s.appendChild(t)
-    x.appendChild(s)
     q = db.GqlQuery('SELECT * FROM Classroom WHERE building = :1 ORDER BY name ASC', Content)
     Content = ''
     for c in q.fetch(limit = 999):
@@ -46,16 +26,7 @@ def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
                 tmp += ' '
         if tmp.find('O') >= 0:
             Content += tmp + '\n'
-    s = d.createElement('Content')
-    t = d.createCDATASection(Content)
-    s.appendChild(t)
-    x.appendChild(s)
-    s = d.createElement('FuncFlag')
-    t = d.createTextNode('0')
-    s.appendChild(t)
-    x.appendChild(s)
-    dat = x.toxml()
-    return dat
+    return genTextXml(ToUserName, FromUserName, CreateTime, MsgType, Content)
 
 def getOrCreateClassroomByName(n):
     c = db.GqlQuery('SELECT * FROM Classroom WHERE name = :1', n).get()
