@@ -7,7 +7,7 @@ import json
 import webapp2
 
 def validate(c):
-    if db.GqlQuery('SELECT * FROM Classroom WHERE building = :1', c):
+    if db.GqlQuery('SELECT * FROM Classroom WHERE building = :1', c).get():
         return True
     return False
 

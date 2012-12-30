@@ -24,7 +24,6 @@ def saveMsgLog(fromUser, req):
     m = MessageLog()
     m.fromUser = u
     m.req = unicode(req)
-#    m.res = res
     m.save()
 
 def normalizeContent(c):
@@ -87,6 +86,7 @@ class IndexHandler(webapp2.RequestHandler):
         else:
             res = defaultAnswer(ToUserName, FromUserName, CreateTime, MsgType, Content)
         saveMsgLog(ToUserName, Content)
+#        logging.info(res)
         self.response.write(res)
 
 app = webapp2.WSGIApplication([
