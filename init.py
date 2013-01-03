@@ -22,7 +22,6 @@ class InitHandler(webapp2.RequestHandler):
         g = db.GqlQuery('SELECT * FROM Global').get()
         if not g:
             g = Global()
-            g.totalPattern = 3
             g.save()
 
 app = webapp2.WSGIApplication([

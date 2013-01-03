@@ -88,7 +88,7 @@ class FetchHandler(webapp2.RequestHandler):
             title = j.get_text()
             url = 'http://www.oiegg.com/' + j.get('href')
             t = db.GqlQuery('SELECT * FROM TopTenTopic WHERE rank = :1', i).get()
-            if t.url == url:
+            if t.url == url and t.title == title:
                 continue
             t.url = url
             t.title = title

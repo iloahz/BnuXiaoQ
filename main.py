@@ -25,6 +25,9 @@ def saveMsgLog(fromUser, req):
     m.fromUser = u
     m.req = unicode(req)
     m.save()
+    g = db.GqlQuery('SELECT * FROM Global').get()
+    g.totalMsg += 1
+    g.save()
 
 def normalizeContent(c):
     c = c.lower().strip()

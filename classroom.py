@@ -31,6 +31,7 @@ def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
             Content += tmp + '\n'
     Content += '\n更新时间：'
     Content += (upd + datetime.timedelta(hours = 8)).strftime('%m月%d日 %H:%M')
+    Content += '\n\n感谢 BNU校园百科 友情提供数据，更多内容请访问：http://m.bnubaike.cn'
     return genTextXml(ToUserName, FromUserName, CreateTime, MsgType, Content)
 
 def getOrCreateClassroomByName(n):

@@ -23,12 +23,12 @@ def getRandomPattern():
 def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
     p = db.GqlQuery('SELECT * FROM Pattern WHERE input = :1', Content).get()
     Content = p.output
-    if p.hintNext:
-        Content += '\n\n你也可以再试试“' + p.hintNext + '”哦~'
-    p.hintNext = getRandomPattern()
-    if p.hintNext == p.input:
-        p.hintNext = None
-    p.save()
+#    if p.hintNext:
+#        Content += '\n\n你也可以再试试“' + p.hintNext + '”哦~'
+#    p.hintNext = getRandomPattern()
+#    if p.hintNext == p.input:
+#        p.hintNext = None
+#    p.save()
     return genTextXml(ToUserName, FromUserName, CreateTime, MsgType, Content)
 
 def createOrUpdatePattern(i, o):

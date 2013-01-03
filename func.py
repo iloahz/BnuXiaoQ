@@ -67,4 +67,7 @@ def getOrCreateUserById(id):
     if not u:
         u = User(wechatId = id)
         u.save()
+        g = db.GqlQuery('SELECT * FROM Global').get()
+        g.totalUser += 1
+        g.save()
     return u
