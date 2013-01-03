@@ -24,6 +24,10 @@ handlers:
   script: classroom.app
   login: admin
 
+- url: /movie(.*)
+  script: movie.app
+  login: admin
+
 - url: /pattern(.*)
   script: pattern.app
   login: admin

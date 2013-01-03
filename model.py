@@ -44,4 +44,14 @@ class Classroom(db.Model):
     updateTime = db.DateTimeProperty(auto_now = True)
 
 class Global(db.Model):
-    totalPattern = db.IntegerProperty()
+    totalUser = db.IntegerProperty(default = 0)
+    totalMsg = db.IntegerProperty(default = 0)
+    totalPattern = db.IntegerProperty(default = 0)
+
+class Movie(db.Model):
+    uid = db.IntegerProperty()
+    theater = db.StringProperty()
+    name = db.StringProperty()
+    startTime = db.StringProperty()
+    price = db.StringProperty()
+    updateTime = db.DateTimeProperty(auto_now = True)
