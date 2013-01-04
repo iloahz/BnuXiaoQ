@@ -10,6 +10,7 @@ import pattern
 import weather
 import translate
 import classroom
+import movie
 
 def defaultAnswer(ToUserName, FromUserName, CreateTime, MsgType, Content):
     Content = '''小Q都听不懂你在说什么诶...坏人!
@@ -86,6 +87,8 @@ class IndexHandler(webapp2.RequestHandler):
             res = translate.answer(ToUserName, FromUserName, CreateTime, MsgType, Content)
         elif classroom.validate(Content):
             res = classroom.answer(ToUserName, FromUserName, CreateTime, MsgType, Content)
+        elif movie.validate(Content):
+            res = movie.answer(ToUserName, FromUserName, CreateTime, MsgType, Content)
         else:
             res = defaultAnswer(ToUserName, FromUserName, CreateTime, MsgType, Content)
         saveMsgLog(ToUserName, Content)
