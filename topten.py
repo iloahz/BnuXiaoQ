@@ -8,7 +8,7 @@ def validate(c):
     return False
 
 def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
-    CreateTime = int(time.time())
+    CreateTime = str(int(time.time()))
     r = minidom.getDOMImplementation()
     d = r.createDocument(None, 'xml', None)
     #x is the root node
