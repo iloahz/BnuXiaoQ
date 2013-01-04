@@ -29,6 +29,7 @@ def parseTextXml(x):
     return ToUserName, FromUserName, CreateTime, MsgType, Content
 
 def genTextXml(ToUserName, FromUserName, CreateTime, MsgType, Content, FuncFlag = '0'):
+    CreateTime = int(time.time())
     r = minidom.getDOMImplementation()
     d = r.createDocument(None, 'xml', None)
     x = d.createElement('xml')

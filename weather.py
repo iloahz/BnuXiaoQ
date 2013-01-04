@@ -25,26 +25,6 @@ def answerNext(d):
     return s
 
 def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
-    r = minidom.getDOMImplementation()
-    d = r.createDocument(None, 'xml', None)
-    #x is the root node
-    x = d.createElement('xml')
-    s = d.createElement('ToUserName')
-    t = d.createCDATASection(ToUserName)
-    s.appendChild(t)
-    x.appendChild(s)
-    s = d.createElement('FromUserName')
-    t = d.createCDATASection(FromUserName)
-    s.appendChild(t)
-    x.appendChild(s)
-    s = d.createElement('CreateTime')
-    t = d.createTextNode(CreateTime)
-    s.appendChild(t)
-    x.appendChild(s)
-    s = d.createElement('MsgType')
-    t = d.createCDATASection('Text')
-    s.appendChild(t)
-    x.appendChild(s)
     Content = memcache.get(key = 'weather')
     if not Content:
         Content = ''
@@ -56,16 +36,7 @@ def answer(ToUserName, FromUserName, CreateTime, MsgType, Content):
         Content += '\n更新时间：'
         Content += (w.updateTime + datetime.timedelta(hours = 8)).strftime('%m月%d日 %H:%M')
         memcache.add(key = 'weather', value = Content, time = 600)
-    s = d.createElement('Content')
-    t = d.createCDATASection(Content)
-    s.appendChild(t)
-    x.appendChild(s)
-    s = d.createElement('FuncFlag')
-    t = d.createTextNode('0')
-    s.appendChild(t)
-    x.appendChild(s)
-    dat = x.toxml()
-    return dat
+    return genTextXml(ToUserName, FromUserName, CreateTime, MsgType, Content)
 
 def getOrCreateWeatherByDay(d):
     w = db.GqlQuery('SELECT * FROM Weather WHERE day = :1', d).get()
